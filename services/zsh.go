@@ -21,7 +21,6 @@ type ParseOptions struct {
 }
 
 func CreateZshFiles(dest string, system string, supportJava bool) error {
-	templateParser := template.New("parser")
 	parseOptions := makeParseOptions(system, supportJava)
 	tmplDir := path.Join(rootPath(), "templates/")
 	templateFiles, err := os.ReadDir(tmplDir)
@@ -31,7 +30,7 @@ func CreateZshFiles(dest string, system string, supportJava bool) error {
 
 	for _, file := range templateFiles {
 		tmplFile := path.Join(tmplDir, file.Name())
-		tmpl, err := templateParser.ParseFiles(tmplFile)
+		tmpl, err := template.ParseFiles(tmplFile)
 		if err != nil {
 			return err
 		}
