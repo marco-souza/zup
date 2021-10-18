@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+
+	services "marco-souza/zup/services"
 )
 
 func Execute() {
@@ -15,7 +17,7 @@ func Execute() {
 
 func initRootCmd() *cobra.Command {
 	cli := &cobra.Command{
-		Use:   "zup [-o dest] [-s arch|ubuntu|osx]",
+		Use:   "zup",
 		Short: "Zsh setUP",
 		Long:  "cli tool to setup your ZSH terminal.",
 		Run:   rootHandler,
@@ -31,19 +33,22 @@ func initRootCmd() *cobra.Command {
 func rootHandler(cmd *cobra.Command, args []string) {
 	system, _ := cmd.Flags().GetString("system")
 	dest, _ := cmd.Flags().GetString("output")
+	supportJava, _ := cmd.Flags().GetBool("java")
 
-	fmt.Println(system, dest)
+	services.CreateZshFiles(dest, system, supportJava)
+
+	fmt.Println("Done, you are ready to go! 🐹")
+	fmt.Println("You can start a new zsh session now :)")
 }
-
-var systemOptions = []string{"arch", "osx", "ubuntu"}
 
 func setupRootFlags(cmd *cobra.Command) {
 	homeFolder := os.Getenv("HOME")
 	persistentFlags := cmd.PersistentFlags()
-	usage := fmt.Sprintf("Select operational system: [%s]", strings.Join(systemOptions, "|"))
+	usage := fmt.Sprintf("Select operational system: [%s]", strings.Join(services.SystemOptions, "|"))
 
 	persistentFlags.StringP("system", "s", "arch", usage) // TODO: add get default OS
 	persistentFlags.StringP("output", "o", homeFolder, "Destination folder")
+	persistentFlags.BoolP("java", "j", false, "Enable Java Support (with SDKMan)")
 }
 
 func valdiateFlags(cmd *cobra.Command, args []string) error {
@@ -58,10 +63,8 @@ func valdiateFlags(cmd *cobra.Command, args []string) error {
 
 func validateSystem(cmd *cobra.Command) error {
 	system, _ := cmd.Flags().GetString("system")
-	for _, op := range systemOptions {
-		if op == system {
-			return nil
-		}
+	if services.IsSystemOption(system) {
+		return nil
 	}
 	return fmt.Errorf("%s is not a valid operational system", system)
 }
