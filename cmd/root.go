@@ -10,8 +10,7 @@ import (
 
 func Execute() {
 	cli := initRootCmd()
-	err := cli.Execute()
-	check(err)
+	cli.Execute()
 }
 
 func initRootCmd() *cobra.Command {
@@ -75,10 +74,4 @@ func validateDestination(cmd *cobra.Command) error {
 		}
 	}
 	return nil
-}
-
-func check(err error) {
-	if err != nil {
-		panic(err)
-	}
 }
