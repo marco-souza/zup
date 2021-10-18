@@ -1,0 +1,7 @@
+#! /bin/bash
+go fmt . && \
+gopls fix -w ./**/*.go && \
+goimports -w . && \
+go mod tidy && \
+go install . && \
+git update-index --again
