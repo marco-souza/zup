@@ -1,7 +1,7 @@
 package main
 
 import (
-	cmd "marco-souza/zup/cmd"
+	cmd "github.com/marco-souza/zup/cmd"
 )
 
 func main() {

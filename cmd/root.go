@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	services "marco-souza/zup/services"
+	services "github.com/marco-souza/zup/services"
 )
 
 func Execute() {
