@@ -1,4 +1,4 @@
-module marco-souza/zup
+module github.com/marco-souza/zup
 
 go 1.17
 
